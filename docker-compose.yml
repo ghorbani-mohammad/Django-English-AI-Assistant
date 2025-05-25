@@ -1,6 +1,6 @@
 services:
-  pat-mat_db:
-    container_name: pat-mat_db
+  english-assistant_db:
+    container_name: english-assistant_db
     image: postgres:14.3-alpine
     restart: unless-stopped
     volumes:
@@ -8,16 +8,16 @@ services:
     env_file:
       - .env
 
-  pat-mat_api:
-    container_name: pat-mat_api
+  english-assistant_api:
+    container_name: english-assistant_api
     build: .
     restart: unless-stopped
     depends_on:
-      - pat-mat_db
+      - english-assistant_db
     volumes:
       - .:/app
     ports:
       - 9062:80
-    command: ["python", "/app/pat-mat/manage.py", "runserver", "0:80"]
+    command: ["python", "/app/english-assistant/manage.py", "runserver", "0:80"]
     env_file:
       - .env

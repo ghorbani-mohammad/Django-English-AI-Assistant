@@ -13,6 +13,6 @@ todo
 venv
 static
 backend_db
-pat-mat/celerybeat-schedule
-pat-mat/celerybeat.pid
-pat-mat/static
+english-assistant/celerybeat-schedule
+english-assistant/celerybeat.pid
+english-assistant/static

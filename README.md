@@ -2,7 +2,7 @@
 
 - Server: Azure
 - Port: 9062
-- Project path: `/var/www/pat-mat/`
+- Project path: `/var/www/english-assistant/`
 - Doc Link:
 - Nginx log files:
     ```
@@ -10,4 +10,4 @@
     error:  /var/log/nginx/api-backend_error.log
     ```
 - Links:
-    * [pat-mat.com](https://pat-mat.com)
+    * [english-assistant.com](https://english-assistant.com)

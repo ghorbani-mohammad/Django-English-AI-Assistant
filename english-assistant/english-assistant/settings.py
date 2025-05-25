@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-+cmd#(moufeqga9en_!6ww84pr7-ll=0&mnu+9!-*1*g191l((
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG")
 
-ALLOWED_HOSTS = ["pat-mat.6thsolution.com"]
+ALLOWED_HOSTS = ["english-assistant.m-gh.com"]
 
 
 # Application definition
@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'pat-mat.urls'
+ROOT_URLCONF = 'english-assistant.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'pat-mat.wsgi.application'
+WSGI_APPLICATION = 'english-assistant.wsgi.application'
 
 
 # Database
@@ -81,7 +81,7 @@ DATABASES = {
         "NAME": "postgres",
         "USER": env.str("POSTGRES_USERNAME"),
         "PASSWORD": env.str("POSTGRES_PASSWORD"),
-        "HOST": "pat-mat_db",
+        "HOST": "english-assistant_db",
         "PORT": "5432",
     }
 }
