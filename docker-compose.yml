@@ -1,0 +1,23 @@
+services:
+  pat-mat_db:
+    container_name: pat-mat_db
+    image: postgres:14.3-alpine
+    restart: unless-stopped
+    volumes:
+      - ./backend_db:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  pat-mat_api:
+    container_name: pat-mat_api
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - pat-mat_db
+    volumes:
+      - .:/app
+    ports:
+      - 9062:80
+    command: ["python", "/app/pat-mat/manage.py", "runserver", "0:80"]
+    env_file:
+      - .env

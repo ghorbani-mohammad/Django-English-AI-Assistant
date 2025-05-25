@@ -1,0 +1,55 @@
+services:
+  english-assistant_db:
+    container_name: english-assistant_db
+    image: postgres:14.3-alpine
+    restart: unless-stopped
+    volumes:
+      - ./backend_db:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  english-assistant_api:
+    container_name: english-assistant_api
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - english-assistant_db
+    volumes:
+      - .:/app
+    ports:
+      - 9062:80
+    env_file:
+      - .env
+
+  # backend_celery:
+  #   container_name: backend_celery
+  #   build: .
+  #   working_dir: /app/english-assistant
+  #   command: ["celery", "-A", "english-assistant", "worker", "-l", "info"]
+  #   restart: unless-stopped
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - backend_db
+  #     - backend_redis
+  #   env_file:
+  #     - .env
+
+  # backend_beat:
+  #   container_name: backend_beat
+  #   build: .
+  #   working_dir: /app/english-assistant
+  #   command: ["celery", "-A", "english-assistant", "beat", "-l", "info"]
+  #   restart: unless-stopped
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - backend_db
+  #     - backend_redis
+  #   env_file:
+  #     - .env
+
+  # backend_redis:
+  #   container_name : backend_redis
+  #   image: redis:6.2-alpine
+  #   restart: unless-stopped
