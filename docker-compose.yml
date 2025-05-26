@@ -18,7 +18,7 @@ services:
     build: .
     restart: unless-stopped
     depends_on:
-      crypto_assets_db:
+      english-assistant_db:
         condition: service_healthy
     volumes:
       - .:/app
