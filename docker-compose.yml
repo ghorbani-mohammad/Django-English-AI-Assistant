@@ -7,13 +7,19 @@ services:
       - ./backend_db:/var/lib/postgresql/data
     env_file:
       - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -q -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   english-assistant_api:
     container_name: english-assistant_api
     build: .
     restart: unless-stopped
     depends_on:
-      - english-assistant_db
+      crypto_assets_db:
+        condition: service_healthy
     volumes:
       - .:/app
     ports:
