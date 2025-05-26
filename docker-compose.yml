@@ -22,6 +22,7 @@ services:
         condition: service_healthy
     volumes:
       - .:/app
+      - ./static:/app/english-assistant/static
     ports:
       - 9064:80
     command: ["python", "/app/english-assistant/manage.py", "runserver", "0:80"]
