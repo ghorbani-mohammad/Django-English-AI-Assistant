@@ -16,7 +16,7 @@ class GrammarViewSet(viewsets.ReadOnlyModelViewSet):
     A readonly viewset for viewing Grammar instances.
     Provides list and retrieve actions only.
     """
-    queryset = models.Grammar.objects.filter(deleted_at__isnull=True)
+    queryset = models.Grammar.objects.filter(deleted_at__isnull=True).order_by("-id")
     serializer_class = serializers.GrammarSerializer
     permission_classes = [AllowAny]
     pagination_class = StandardResultsSetPagination
