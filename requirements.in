@@ -16,4 +16,5 @@ pyaes
 pycryptodome
 redis==5.0.8
 requests
+openai==1.82
 unidecode
