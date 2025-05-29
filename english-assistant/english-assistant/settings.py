@@ -128,3 +128,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# OpenAI
+OPENAI_API_KEY = env.str("OPENAI_API_KEY")
+OPENAI_ORG_ID = env.str("OPENAI_ORG_ID")
