@@ -16,6 +16,7 @@ class ExpressionViewSet(viewsets.ReadOnlyModelViewSet):
     A readonly viewset for viewing Expression instances.
     Provides list and retrieve actions only.
     """
+
     queryset = models.Expression.objects.filter(deleted_at__isnull=True).order_by("-id")
     serializer_class = serializers.ExpressionSerializer
     permission_classes = [AllowAny]
