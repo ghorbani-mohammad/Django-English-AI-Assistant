@@ -34,9 +34,9 @@ class ChatConsumer(WebsocketConsumer):
             print("socket from flutter project, let's load the cached model")
         self.channel_layer.group_add(self.uid, self.channel_name)
         self.accept()
-        self.send_one_part_message(
-            "Hi, I'm your English AI assistant. How can I help you today?"
-        )
+        # self.send_one_part_message(
+        #     "Hi, I'm your English AI assistant. How can I help you today?"
+        # )
 
     def get_grammar_context(self) -> str:
         """
