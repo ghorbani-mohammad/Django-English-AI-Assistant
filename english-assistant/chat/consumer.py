@@ -19,7 +19,7 @@ from channels.generic.websocket import WebsocketConsumer
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.uid = self.scope["url_route"]["kwargs"]["uid"]
-        self.client = OpenAI(api_key=settings.OPEN_API_KEY)
+        self.client = OpenAI(api_key=settings.OPENAI_API_KEY)
         self.conversation = ""
         self.cached_model = None
         self.cd_model = None
@@ -58,7 +58,7 @@ class ChatConsumer(WebsocketConsumer):
             f.write(audio_bytes)
 
         # Set your OpenAI API key
-        openai.api_key = settings.OPEN_API_KEY
+        openai.api_key = settings.OPENAI_API_KEY
 
         # Call OpenAI Whisper API to transcribe audio
         with open(file_path, "rb") as audio_file:
