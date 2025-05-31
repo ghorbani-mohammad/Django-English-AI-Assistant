@@ -46,6 +46,7 @@ click==8.1.7
     #   click-plugins
     #   click-repl
     #   pip-tools
+    #   uvicorn
 click-didyoumean==0.3.1
     # via celery
 click-plugins==1.1.1
@@ -84,7 +85,9 @@ executing==2.0.1
 gunicorn==23.0.0
     # via -r requirements.in
 h11==0.16.0
-    # via httpcore
+    # via
+    #   httpcore
+    #   uvicorn
 httpcore==1.0.9
     # via httpx
 httpx==0.28.1
@@ -186,6 +189,8 @@ unidecode==1.3.8
     # via -r requirements.in
 urllib3==2.2.2
     # via requests
+uvicorn==0.34.2
+    # via -r requirements.in
 vine==5.1.0
     # via
     #   amqp
@@ -193,6 +198,8 @@ vine==5.1.0
     #   kombu
 wcwidth==0.2.13
     # via prompt-toolkit
+websockets==15.0.1
+    # via -r requirements.in
 wheel==0.44.0
     # via pip-tools
 
