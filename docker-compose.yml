@@ -28,3 +28,8 @@ services:
     command: ["python", "/app/english-assistant/manage.py", "runserver", "0:80"]
     env_file:
       - .env
+
+  english-assistant_redis:
+    container_name: english-assistant_redis
+    image: redis:6.2-alpine
+    restart: unless-stopped

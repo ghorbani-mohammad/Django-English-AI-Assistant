@@ -1,3 +1,5 @@
+channels-redis==4.2.1
+channels==4.2.2
 celery
 django==5.1
 django-admin-sortable2

@@ -140,3 +140,14 @@ DEEPSEEK_BASE_URL = env.str("DEEPSEEK_BASE_URL")
 # Metis
 METIS_BASE_URL = env.str("METIS_BASE_URL")
 METIS_API_KEY = env.str("METIS_API_KEY")
+
+
+ASGI_APPLICATION = "english-assistant.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("english-assistant_redis", 6379)],
+        },
+    },
+}
