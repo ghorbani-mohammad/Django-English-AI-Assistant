@@ -8,6 +8,9 @@ from django.conf import settings
 from django.utils import timezone
 from channels.generic.websocket import WebsocketConsumer
 
+# Import Grammar model
+from grammar.models import Grammar
+
 # from log.models import Chat
 # from model.models import CachedModel
 # from ai.gem import create_cached_model
@@ -19,8 +22,11 @@ from channels.generic.websocket import WebsocketConsumer
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.uid = self.scope["url_route"]["kwargs"]["uid"]
+        self.grammar_id = self.uid
+        # Get the grammar from the database and add it to the conversation as context
+        self.grammar_context = self.get_grammar_context()
         self.client = OpenAI(api_key=settings.OPENAI_API_KEY)
-        self.conversation = ""
+        self.conversation = self.grammar_context
         self.cached_model = None
         self.cd_model = None
         if self.uid == "1":
@@ -31,6 +37,42 @@ class ChatConsumer(WebsocketConsumer):
         self.send_one_part_message(
             "Hi, I'm your English AI assistant. How can I help you today?"
         )
+
+    def get_grammar_context(self) -> str:
+        """
+        Retrieve grammar from database and format it as context for the conversation.
+        """
+        try:
+            # Try to get grammar by ID if grammar_id is a valid integer
+            if self.grammar_id.isdigit():
+                grammar = Grammar.objects.filter(
+                    id=int(self.grammar_id), 
+                    deleted_at__isnull=True
+                ).first()
+                
+                if grammar:
+                    context = f"""You are an English AI assistant specializing in the following grammar topic:
+
+Grammar Topic: {grammar.title}
+Description: {grammar.description}
+
+Please help users with questions related to this grammar topic. Provide clear explanations, examples, and corrections when needed. Always be encouraging and supportive in your responses.
+
+Conversation History:
+"""
+                    return context
+            
+            # If no specific grammar found or grammar_id is not a number, provide general context
+            return """You are an English AI assistant. Help users with grammar, vocabulary, pronunciation, and general English language questions. Provide clear explanations, examples, and corrections when needed. Always be encouraging and supportive in your responses.
+
+Conversation History:
+"""
+        except Exception as e:
+            print(f"Error retrieving grammar context: {e}")
+            return """You are an English AI assistant. Help users with grammar, vocabulary, pronunciation, and general English language questions. Provide clear explanations, examples, and corrections when needed. Always be encouraging and supportive in your responses.
+
+Conversation History:
+"""
 
     def disconnect(self, close_code):
         self.channel_layer.group_discard(self.uid, self.channel_name)
