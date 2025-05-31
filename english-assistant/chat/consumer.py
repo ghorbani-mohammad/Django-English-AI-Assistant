@@ -26,7 +26,7 @@ class ChatConsumer(WebsocketConsumer):
         # Get the grammar from the database and add it to the conversation as context
         self.grammar_context = self.get_grammar_context()
         self.client = OpenAI(api_key=settings.OPENAI_API_KEY)
-        self.conversation = self.grammar_context
+        self.conversation = ""
         self.cached_model = None
         self.cd_model = None
         if self.uid == "1":
@@ -42,16 +42,17 @@ class ChatConsumer(WebsocketConsumer):
         """
         Retrieve grammar from database and format it as context for the conversation.
         """
+        if not self.grammar_id:
+            raise ValueError("Grammar ID is required")
+        if not self.grammar_id.isdigit():
+            raise ValueError("Grammar ID must be a valid integer")
         try:
-            # Try to get grammar by ID if grammar_id is a valid integer
-            if self.grammar_id.isdigit():
-                grammar = Grammar.objects.filter(
-                    id=int(self.grammar_id), 
-                    deleted_at__isnull=True
-                ).first()
-                
-                if grammar:
-                    context = f"""You are an English AI assistant specializing in the following grammar topic:
+            grammar = Grammar.objects.filter(
+                id=int(self.grammar_id), deleted_at__isnull=True
+            ).first()
+
+            if grammar:
+                context = f"""You are an English AI assistant specializing in the following grammar topic:
 
 Grammar Topic: {grammar.title}
 Description: {grammar.description}
@@ -60,8 +61,8 @@ Please help users with questions related to this grammar topic. Provide clear ex
 
 Conversation History:
 """
-                    return context
-            
+                return context
+
             # If no specific grammar found or grammar_id is not a number, provide general context
             return """You are an English AI assistant. Help users with grammar, vocabulary, pronunciation, and general English language questions. Provide clear explanations, examples, and corrections when needed. Always be encouraging and supportive in your responses.
 
@@ -180,9 +181,18 @@ Conversation History:
                 model="gpt-4o-mini",
                 messages=[
                     {
+                        "role": "system",
+                        "content": f"You are an English AI assistant specializing in the following grammar topic: {self.grammar_context}",
+                    },
+                    # follow the max tokens limit
+                    {
+                        "role": "system",
+                        "content": f"You can only answer in 300 tokens",
+                    },
+                    {
                         "role": "user",
                         "content": self.conversation,
-                    }
+                    },
                 ],
                 temperature=0,
                 max_tokens=300,  # Adjust based on desired response length
