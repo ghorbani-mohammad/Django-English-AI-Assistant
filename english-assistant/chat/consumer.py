@@ -100,17 +100,15 @@ Conversation History:
         with open(file_path, "wb") as f:
             f.write(audio_bytes)
 
-        # Set your OpenAI API key
-        openai.api_key = settings.OPENAI_API_KEY
-
-        # Call OpenAI Whisper API to transcribe audio
+        # Call OpenAI Whisper API to transcribe audio using the new v1+ API
         with open(file_path, "rb") as audio_file:
-            transcript = openai.Audio.transcribe(
-                model="whisper-1", file=audio_file  # OpenAI's Whisper model name
+            transcript = self.client.audio.transcriptions.create(
+                model="whisper-1",
+                file=audio_file
             )
 
-        # The response is a dict with 'text' key containing the transcription
-        return transcript["text"]
+        # The response object has a 'text' attribute containing the transcription
+        return transcript.text
 
     def thump_up(self, data: dict):
         pass
