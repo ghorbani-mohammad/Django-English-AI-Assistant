@@ -143,8 +143,6 @@ Conversation History:
                 print(f"Just pinging")
                 return
 
-            
-
             # if "command" in data and data["command"] == "thumb-up":
             #     # check if responseId is in data
             #     if "responseId" not in data:
