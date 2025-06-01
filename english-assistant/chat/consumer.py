@@ -143,7 +143,7 @@ Conversation History:
                 print(f"Just pinging")
                 return
 
-            print(f"Received data: {text_data}")
+            
 
             # if "command" in data and data["command"] == "thumb-up":
             #     # check if responseId is in data
@@ -166,6 +166,7 @@ Conversation History:
 
             elif "data" in data:
                 text_data = data["data"]
+                print(f"Received data: {text_data}")
 
             print("User's message: ", text_data)
             self.conversation += f"User: {text_data}\n"
