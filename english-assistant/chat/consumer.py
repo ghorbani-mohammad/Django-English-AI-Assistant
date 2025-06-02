@@ -161,6 +161,8 @@ Conversation History:
             if "audio" in data:
                 print("Received audio data")
                 text_data = self.convert_audio_to_text(data["audio"])
+                self.send(json.dumps({"error": False, "audio_text": text_data}))
+                self.send_complete_message()
 
             elif "data" in data:
                 text_data = data["data"]
