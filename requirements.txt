@@ -66,6 +66,7 @@ django==5.1
     #   django-filter
     #   django-redis
     #   djangorestframework
+    #   djangorestframework-simplejwt
 django-admin-sortable2==2.2.2
     # via -r requirements.in
 django-cors-headers==4.4.0
@@ -77,6 +78,10 @@ django-filter==24.3
 django-redis==5.4.0
     # via -r requirements.in
 djangorestframework==3.15.2
+    # via
+    #   -r requirements.in
+    #   djangorestframework-simplejwt
+djangorestframework-simplejwt==5.5.0
     # via -r requirements.in
 envparse==0.2.0
     # via -r requirements.in
@@ -143,6 +148,8 @@ pydantic-core==2.33.2
     # via pydantic
 pygments==2.18.0
     # via ipython
+pyjwt==2.9.0
+    # via djangorestframework-simplejwt
 pyproject-hooks==1.1.0
     # via
     #   build
