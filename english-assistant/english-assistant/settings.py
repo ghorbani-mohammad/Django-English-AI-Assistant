@@ -161,3 +161,12 @@ EMAIL_HOST = "smtp-mail.outlook.com"
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", default=None)
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default=None)
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+
+# Celery Configuration
+CELERY_BROKER_URL = "redis://english-assistant_redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://english-assistant_redis:6379/0"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = TIME_ZONE

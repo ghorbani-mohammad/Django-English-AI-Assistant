@@ -103,8 +103,7 @@ Conversation History:
         # Call OpenAI Whisper API to transcribe audio using the new v1+ API
         with open(file_path, "rb") as audio_file:
             transcript = self.client.audio.transcriptions.create(
-                model="whisper-1",
-                file=audio_file
+                model="whisper-1", file=audio_file
             )
 
         # The response object has a 'text' attribute containing the transcription
