@@ -36,20 +36,16 @@ class OTP(BaseModel):
         """Generate a new OTP for the given email"""
         # Generate 6-digit OTP
         otp_code = "".join(random.choices(string.digits, k=6))
-        
+
         # Set expiration time to 3 minutes from now
         expires_at = timezone.now() + timedelta(minutes=3)
-        
+
         # Invalidate any existing unused OTPs for this email
         cls.objects.filter(email=email, is_used=False).update(is_used=True)
-        
+
         # Create new OTP
-        otp = cls.objects.create(
-            email=email,
-            otp_code=otp_code,
-            expires_at=expires_at
-        )
-        
+        otp = cls.objects.create(email=email, otp_code=otp_code, expires_at=expires_at)
+
         return otp
 
     def is_valid(self):

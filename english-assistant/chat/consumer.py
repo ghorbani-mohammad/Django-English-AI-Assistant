@@ -6,6 +6,7 @@ import openai
 from openai import OpenAI
 from django.conf import settings
 from django.utils import timezone
+from django.contrib.auth.models import AnonymousUser
 from channels.generic.websocket import WebsocketConsumer
 
 # Import Grammar model
@@ -21,8 +22,16 @@ from grammar.models import Grammar
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
+        # Check if user is authenticated
+        user = self.scope.get("user")
+        if not user or isinstance(user, AnonymousUser):
+            self.close(code=4001)  # Custom close code for unauthorized
+            return
+
         self.uid = self.scope["url_route"]["kwargs"]["uid"]
         self.grammar_id = self.uid
+        self.user = user  # Store authenticated user
+
         # Get the grammar from the database and add it to the conversation as context
         self.grammar_context = self.get_grammar_context()
         self.client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -76,7 +85,11 @@ Conversation History:
 """
 
     def disconnect(self, close_code):
-        self.channel_layer.group_discard(self.uid, self.channel_name)
+        if hasattr(self, "uid") and hasattr(self, "channel_name"):
+            self.channel_layer.group_discard(self.uid, self.channel_name)
+
+        if close_code == 4001:
+            print(f"WebSocket connection closed: Unauthorized access attempt")
 
     def send_complete_message(self):
         self.send(json.dumps({"error": False, "message": "completed."}))
@@ -167,8 +180,8 @@ Conversation History:
                 text_data = data["data"]
                 print(f"Received data: {text_data}")
 
-            print("User's message: ", text_data)
-            self.conversation += f"User: {text_data}\n"
+            print(f"User {self.user.email} message: {text_data}")
+            self.conversation += f"User ({self.user.email}): {text_data}\n"
 
             answer = ""
 

@@ -32,23 +32,17 @@ class VerifyOTPSerializer(serializers.Serializer):
         otp_code = attrs.get("otp_code")
 
         try:
-            otp = OTP.objects.get(
-                email=email,
-                otp_code=otp_code,
-                is_used=False
-            )
-            
+            otp = OTP.objects.get(email=email, otp_code=otp_code, is_used=False)
+
             if not otp.is_valid():
                 raise serializers.ValidationError(
                     "OTP has expired. Please request a new one."
                 )
-            
+
             attrs["otp_instance"] = otp
-            
+
         except OTP.DoesNotExist:
-            raise serializers.ValidationError(
-                "Invalid OTP code or email address."
-            )
+            raise serializers.ValidationError("Invalid OTP code or email address.")
 
         return attrs
 
@@ -68,4 +62,4 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             # If user exists, we don't raise an error here
             # We'll handle it in the view
             pass
-        return value 
+        return value

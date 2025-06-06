@@ -9,7 +9,6 @@ urlpatterns = [
     # OTP Authentication endpoints
     path("auth/generate-otp/", views.generate_otp, name="generate_otp"),
     path("auth/verify-otp/", views.verify_otp, name="verify_otp"),
-    
     # JWT Token refresh endpoint
     path("auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-] 
+]

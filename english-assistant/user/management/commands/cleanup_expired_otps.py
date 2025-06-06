@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         dry_run = options["dry_run"]
-        
+
         # Find expired OTPs
         expired_otps = OTP.objects.filter(expires_at__lt=timezone.now())
         count = expired_otps.count()
@@ -27,11 +27,13 @@ class Command(BaseCommand):
             if count > 0:
                 self.stdout.write("Expired OTPs that would be deleted:")
                 for otp in expired_otps[:10]:  # Show first 10
-                    self.stdout.write(f"  - {otp.email}: {otp.otp_code} (expired: {otp.expires_at})")
+                    self.stdout.write(
+                        f"  - {otp.email}: {otp.otp_code} (expired: {otp.expires_at})"
+                    )
                 if count > 10:
                     self.stdout.write(f"  ... and {count - 10} more")
         else:
             deleted_count, _ = expired_otps.delete()
             self.stdout.write(
                 self.style.SUCCESS(f"Successfully deleted {deleted_count} expired OTPs")
-            ) 
+            )

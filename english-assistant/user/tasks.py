@@ -135,4 +135,3 @@ def send_template_email_to_user(
                 f"Max retries exceeded for sending template email to user {user_id}"
             )
             return False
-
