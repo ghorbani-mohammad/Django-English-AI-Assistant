@@ -1,6 +1,7 @@
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
+
 
 from . import models, serializers
 
@@ -19,5 +20,5 @@ class ExpressionViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = models.Expression.objects.filter(deleted_at__isnull=True).order_by("-id")
     serializer_class = serializers.ExpressionSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     pagination_class = StandardResultsSetPagination
