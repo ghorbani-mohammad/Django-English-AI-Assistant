@@ -46,9 +46,6 @@ class ChatConsumer(WebsocketConsumer):
         # Generate session ID for this WebSocket connection
         self.session_id = f"{self.user.id}_{self.grammar_id}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
 
-        if self.uid == "1":
-            # ai bot
-            print("socket from flutter project, let's load the cached model")
         self.channel_layer.group_add(self.uid, self.channel_name)
         self.accept()
         # self.send_one_part_message(
