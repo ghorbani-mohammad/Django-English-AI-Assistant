@@ -1,6 +1,4 @@
-import jwt
-from django.conf import settings
-from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import get_user_model
 from channels.middleware import BaseMiddleware
 from rest_framework_simplejwt.tokens import AccessToken

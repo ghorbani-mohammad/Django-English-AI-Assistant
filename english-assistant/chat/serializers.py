@@ -1,8 +1,6 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
 
 from .models import Message
-from grammar.serializers import GrammarSerializer
 
 
 class MessageSerializer(serializers.ModelSerializer):
