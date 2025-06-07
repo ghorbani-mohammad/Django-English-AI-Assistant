@@ -36,7 +36,7 @@ class ChatHistoryListView(generics.ListAPIView):
 
         queryset = Message.objects.filter(
             user=user, grammar_id=grammar_id, deleted_at__isnull=True
-        ).select_related("user", "grammar")
+        ).select_related("user", "grammar").order_by("-id")
 
         # Filter by message type if specified
         message_type = self.request.query_params.get("message_type")
