@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "grammar",
     "expression",
     "user",
+    "chat",
 ]
 
 MIDDLEWARE = [
