@@ -3,12 +3,12 @@ from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import OTP, Profile
-from .serializers import GenerateOTPSerializer, VerifyOTPSerializer
+from .serializers import GenerateOTPSerializer, VerifyOTPSerializer, ProfileSerializer
 from .tasks import send_template_email_to_user
 
 logger = logging.getLogger(__name__)
@@ -153,4 +153,47 @@ def verify_otp(request):
         return Response(
             {"error": "Failed to verify OTP. Please try again."},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+
+@api_view(["GET", "PUT"])
+@permission_classes([IsAuthenticated])
+def profile_view(request):
+    """
+    Get or update user profile.
+    
+    GET /api/auth/profile/
+    PUT /api/auth/profile/
+    {
+        "timezone": "America/New_York"
+    }
+    """
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        # Create profile if it doesn't exist
+        profile = Profile.objects.create(user=request.user)
+    
+    if request.method == "GET":
+        serializer = ProfileSerializer(profile)
+        return Response(serializer.data)
+    
+    elif request.method == "PUT":
+        serializer = ProfileSerializer(profile, data=request.data, partial=True)
+        
+        if not serializer.is_valid():
+            return Response(
+                {"error": "Invalid data", "details": serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        serializer.save()
+        logger.info(f"Profile updated for user: {request.user.email}")
+        
+        return Response(
+            {
+                "message": "Profile updated successfully",
+                "profile": serializer.data
+            },
+            status=status.HTTP_200_OK,
         )

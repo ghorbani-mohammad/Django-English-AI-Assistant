@@ -11,4 +11,6 @@ urlpatterns = [
     path("auth/verify-otp/", views.verify_otp, name="verify_otp"),
     # JWT Token refresh endpoint
     path("auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    # Profile management endpoint
+    path("auth/profile/", views.profile_view, name="profile"),
 ]

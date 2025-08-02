@@ -1,7 +1,23 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
-from .models import OTP
+from .models import OTP, Profile
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    """Serializer for Profile model"""
+    
+    class Meta:
+        model = Profile
+        fields = ["timezone"]
+        
+    def validate_timezone(self, value):
+        """Validate timezone value"""
+        # You can add more validation here if needed
+        # For now, we'll accept any non-empty string
+        if not value or not value.strip():
+            raise serializers.ValidationError("Timezone cannot be empty")
+        return value.strip()
 
 
 class GenerateOTPSerializer(serializers.Serializer):
