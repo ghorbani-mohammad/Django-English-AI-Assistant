@@ -165,7 +165,9 @@ def profile_view(request):
     GET /api/auth/profile/
     PUT /api/auth/profile/
     {
-        "timezone": "America/New_York"
+        "timezone": "America/New_York",
+        "ai_word_count_limit": 2000,
+        "image": <file>
     }
     """
     try:

@@ -9,7 +9,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Profile
-        fields = ["timezone"]
+        fields = ["timezone", "image", "ai_word_count_limit"]
         
     def validate_timezone(self, value):
         """Validate timezone value"""
@@ -18,6 +18,14 @@ class ProfileSerializer(serializers.ModelSerializer):
         if not value or not value.strip():
             raise serializers.ValidationError("Timezone cannot be empty")
         return value.strip()
+    
+    def validate_ai_word_count_limit(self, value):
+        """Validate AI word count limit"""
+        if value < 100:
+            raise serializers.ValidationError("AI word count limit must be at least 100")
+        if value > 10000:
+            raise serializers.ValidationError("AI word count limit cannot exceed 10000")
+        return value
 
 
 class GenerateOTPSerializer(serializers.Serializer):

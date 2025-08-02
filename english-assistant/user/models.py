@@ -12,6 +12,8 @@ from reusable.models import BaseModel
 class Profile(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     timezone = models.CharField(max_length=64, default="UTC")
+    image = models.ImageField(upload_to="profile_images/", null=True, blank=True)
+    ai_word_count_limit = models.PositiveIntegerField(default=1000)
 
     def __str__(self):
         return f"({self.pk} {self.user.first_name} {self.user.last_name})"
