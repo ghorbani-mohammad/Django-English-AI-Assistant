@@ -12,5 +12,5 @@ urlpatterns = [
     # JWT Token refresh endpoint
     path("auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # Profile management endpoint
-    path("auth/profile/", views.profile_view, name="profile"),
+    path("profile/", views.profile_view, name="profile"),
 ]
