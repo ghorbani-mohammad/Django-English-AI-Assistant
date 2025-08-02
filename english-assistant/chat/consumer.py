@@ -168,7 +168,7 @@ Conversation History:
                 content=content,
                 message_type=message_type,
                 session_id=self.session_id,
-                user_timezone=str(timezone.get_current_timezone()),
+                user_timezone=self.user.profile.timezone,
                 audio_file=audio_file,
                 transcription=transcription,
             )
@@ -191,7 +191,7 @@ Conversation History:
                 content=content,
                 response_id=response_id,
                 session_id=self.session_id,
-                user_timezone=str(timezone.get_current_timezone()),
+                user_timezone=self.user.profile.timezone,
             )
             print(f"Saved AI message: {message.id}")
             return message
