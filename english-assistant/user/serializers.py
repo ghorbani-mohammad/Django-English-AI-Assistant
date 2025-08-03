@@ -27,6 +27,14 @@ class ProfileSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("AI word count limit cannot exceed 10000")
         return value
 
+    def to_representation(self, instance):
+        """Convert timezone to string representation"""
+        data = super().to_representation(instance)
+        data["email"] = instance.user.email
+        data["first_name"] = instance.user.first_name
+        data["last_name"] = instance.user.last_name
+        return data
+
 
 class GenerateOTPSerializer(serializers.Serializer):
     email = serializers.EmailField()
