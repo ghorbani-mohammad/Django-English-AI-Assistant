@@ -1,4 +1,5 @@
 import logging
+
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from rest_framework import status
@@ -6,6 +7,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.generics import RetrieveUpdateAPIView
+
 
 from .models import OTP, Profile
 from .serializers import GenerateOTPSerializer, VerifyOTPSerializer, ProfileSerializer
@@ -156,42 +159,28 @@ def verify_otp(request):
         )
 
 
-@api_view(["GET", "PUT"])
-@permission_classes([IsAuthenticated])
-def profile_view(request):
-    """
-    Get or update user profile.
-    
-    GET /api/auth/profile/
-    PUT /api/auth/profile/
-    {
-        "timezone": "America/New_York",
-        "ai_word_count_limit": 2000,
-        "image": <file>
-    }
-    """
-    try:
-        profile = Profile.objects.get(user=request.user)
-    except Profile.DoesNotExist:
-        # Create profile if it doesn't exist
-        profile = Profile.objects.create(user=request.user)
-    
-    if request.method == "GET":
-        serializer = ProfileSerializer(profile)
-        return Response(serializer.data)
-    
-    elif request.method == "PUT":
-        serializer = ProfileSerializer(profile, data=request.data, partial=True)
-        
+class ProfileRetrieveUpdateView(RetrieveUpdateAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        try:
+            profile = Profile.objects.get(user=self.request.user)
+        except Profile.DoesNotExist:
+            profile = Profile.objects.create(user=self.request.user)
+        return profile
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop("partial", True)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
         if not serializer.is_valid():
             return Response(
                 {"error": "Invalid data", "details": serializer.errors},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        
-        serializer.save()
+        self.perform_update(serializer)
         logger.info(f"Profile updated for user: {request.user.email}")
-        
         return Response(
             {
                 "message": "Profile updated successfully",
